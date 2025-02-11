@@ -1,6 +1,7 @@
-import { useState, useCallback } from 'react';
-import { PromptOptimizer, OptimizationConfig, PromptVersionWithEvaluation } from '../utils/promptOptimizer';
+import { useState } from 'react';
+import { OptimizationConfig } from '../utils/promptOptimizer';
 import { usePromptFinderStore } from '../stores/promptFinderStore';
+import { runSlowComputer } from '../utils/slowComputer';
 
 interface OptimizationLog {
   timestamp: string;
@@ -12,65 +13,70 @@ interface OptimizationLog {
   title?: string;
 }
 
+type OptimizationStatus = 'idle' | 'optimizing' | 'error' | 'success';
+
+interface UsePromptOptimizationProps {
+  onStreamingStart?: () => void;
+  onStreamingEnd?: () => void;
+  onError?: (error: Error) => void;
+}
+
 export const usePromptOptimization = ({
-  runPrompt,
-  apiKey
-}: {
-  runPrompt: (prompt: string) => Promise<string>;
-  apiKey: string;
-}) => {
+  onStreamingStart,
+  onStreamingEnd,
+  onError,
+}: UsePromptOptimizationProps = {}) => {
   const addPromptVersion = usePromptFinderStore(state => state.addPromptVersion);
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState<OptimizationStatus>('idle');
   const [logs, setLogs] = useState<OptimizationLog[]>([]);
 
-  const addLog = useCallback((message: string, response?: string, title?: string, step?: number, substep?: number) => {
-    const timestamp = new Date().toLocaleTimeString();
-    setLogs(prevLogs => [
-      ...prevLogs,
-      { 
-        timestamp, 
-        message, 
-        response,
-        title,
-        step,
-        substep,
-        isExpanded: true // Latest log is expanded by default
-      }
-    ]);
-    setStatus(message); // Update status with latest log message
-  }, []);
-
-  const optimizePrompt = async (config: OptimizationConfig, parentVersion?: PromptVersionWithEvaluation) => {
-    setIsOptimizing(true);
-    setError(null);
-    setLogs([]);
-
+  const optimizePrompt = async (config: OptimizationConfig) => {
     try {
-      const wrappedRunPrompt = async (prompt: string) => {
-        const response = await runPrompt(prompt);
-        return response;
-      };
+      setIsOptimizing(true);
+      setError(null);
+      setStatus('optimizing');
+      onStreamingStart?.();
 
-      const optimizer = new PromptOptimizer(
-        config,
-        wrappedRunPrompt,
-        addLog,
-        addPromptVersion
-      );
+      // Add initial log
+      setLogs(prev => [...prev, {
+        timestamp: new Date().toLocaleTimeString(),
+        message: 'Starting optimization process',
+        title: 'Optimization Start',
+        step: 1
+      }]);
 
-      const result = await optimizer.optimize();
-      
-      if (result.error) {
-        throw new Error(result.error);
-      }
+      // Run optimization using slowcomputer
+      const result = await runSlowComputer(config);
 
-      addLog('Optimization completed successfully', undefined, "Optimization Complete", 5);
+      // Add versions to store
+      result.versions.forEach(version => {
+        addPromptVersion(version);
+      });
+
+      // Update status and logs
+      setStatus('success');
+      setLogs(prev => [...prev, {
+        timestamp: new Date().toLocaleTimeString(),
+        message: 'Optimization completed successfully',
+        title: 'Complete',
+        step: 2
+      }]);
+
+      onStreamingEnd?.();
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       setError(errorMessage);
-      addLog(`Error: ${errorMessage}`, undefined, "Error", -1);
+      setStatus('error');
+      setLogs(prev => [...prev, {
+        timestamp: new Date().toLocaleTimeString(),
+        message: `Optimization failed: ${errorMessage}`,
+        title: 'Error',
+        step: -1
+      }]);
+      onError?.(err instanceof Error ? err : new Error(errorMessage));
+      throw err;
     } finally {
       setIsOptimizing(false);
     }
@@ -82,6 +88,6 @@ export const usePromptOptimization = ({
     error,
     status,
     logs,
-    setLogs
+    setLogs,
   };
-}; 
+};  
