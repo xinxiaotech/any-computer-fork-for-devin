@@ -19,12 +19,16 @@ interface UsePromptOptimizationProps {
   onStreamingStart?: () => void;
   onStreamingEnd?: () => void;
   onError?: (error: Error) => void;
+  runPrompt?: (prompt: string) => Promise<string>;
+  apiKey?: string;
 }
 
 export const usePromptOptimization = ({
   onStreamingStart,
   onStreamingEnd,
   onError,
+  runPrompt,
+  apiKey,
 }: UsePromptOptimizationProps = {}) => {
   const addPromptVersion = usePromptFinderStore(state => state.addPromptVersion);
   const [isOptimizing, setIsOptimizing] = useState(false);
@@ -90,4 +94,4 @@ export const usePromptOptimization = ({
     logs,
     setLogs,
   };
-};    
+};        

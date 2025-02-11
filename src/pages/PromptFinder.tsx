@@ -73,21 +73,9 @@ const PromptFinderContent: React.FC = () => {
     logs: optimizationLogs,
     setLogs: setOptimizationLogs
   } = usePromptOptimization({
-    runPrompt: async (prompt: string) => {
-      const response = await runPrompt(
-        [{ role: 'user', content: prompt }],
-        { 
-          providers: [{ 
-            provider: 'Gemini', 
-            model: 'gemini-2.0-flash-exp',
-            apiKey: apiKeySettings.Gemini || ''
-          }],
-          skipVersioning: true
-        }
-      );
-      return response || '';
-    },
-    apiKey: apiKeySettings.Gemini || ''
+    onStreamingStart: () => setError(''),
+    onStreamingEnd: () => {},
+    onError: (error) => setError(error.message)
   });
 
   const handleStartOptimization = async () => {
@@ -352,4 +340,4 @@ export const PromptFinder: React.FC = () => {
       <PromptFinderContent />
     </div>
   );
-};    
+};      

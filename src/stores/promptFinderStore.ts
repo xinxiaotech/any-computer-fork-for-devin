@@ -19,6 +19,7 @@ export interface PromptVersion {
   position?: { x: number; y: number };
   evaluation?: EvaluationData;
   rawEvaluationResult?: string;
+  explanation?: string;
 }
 
 interface PromptFinderState {
