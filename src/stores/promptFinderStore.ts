@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { Node, Edge } from 'reactflow';
 import { persist } from 'zustand/middleware';
-import { EvaluationData } from '../utils/promptOptimizer';
+import { EvaluationData } from '../types/optimization';
 import { versionUtils } from '../utils/versionUtils';
 
 export interface NodePosition {

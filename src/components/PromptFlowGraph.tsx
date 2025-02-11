@@ -16,7 +16,7 @@ import ReactFlow, {
 import Dagre from '@dagrejs/dagre';
 import 'reactflow/dist/style.css';
 import { PromptVersion, usePromptFinderStore, versionUtils } from '../stores/promptFinderStore';
-import { PromptVersionWithEvaluation } from '../utils/promptOptimizer';
+import { PromptVersionWithEvaluation } from '../types/optimization';
 
 interface PromptFlowGraphProps {
   versions: PromptVersionWithEvaluation[];
@@ -309,4 +309,4 @@ export const PromptFlowGraph: React.FC<PromptFlowGraphProps> = ({
       </ReactFlow>
     </div>
   );
-}; 
+};  

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { OptimizationConfig } from '../utils/promptOptimizer';
+import { OptimizationConfig } from '../types/optimization';
 import { usePromptFinderStore } from '../stores/promptFinderStore';
 import { runSlowComputer } from '../utils/slowComputer';
 
@@ -90,4 +90,4 @@ export const usePromptOptimization = ({
     logs,
     setLogs,
   };
-};  
+};    

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PromptVersionWithEvaluation, EvaluationData } from '../utils/promptOptimizer';
+import { PromptVersionWithEvaluation, EvaluationData } from '../types/optimization';
 import { DiffView } from './DiffView';
 
 interface NodeDetailsProps {
@@ -177,4 +177,4 @@ const NodeDetails: React.FC<NodeDetailsProps> = ({ version, versionIndex, parent
   );
 };
 
-export default NodeDetails; 
+export default NodeDetails;  

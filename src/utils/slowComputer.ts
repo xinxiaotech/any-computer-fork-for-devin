@@ -1,4 +1,4 @@
-import { OptimizationConfig, OptimizationResult } from '../utils/promptOptimizer';
+import { OptimizationConfig, OptimizationResult } from '../types/optimization';
 
 export const runSlowComputer = async (config: OptimizationConfig): Promise<OptimizationResult> => {
   try {
