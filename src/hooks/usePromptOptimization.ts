@@ -54,6 +54,22 @@ export const usePromptOptimization = ({
       // Run optimization using slowcomputer
       const result = await runSlowComputer(config);
 
+      // Handle evaluation step
+      setLogs(prev => [...prev, {
+        timestamp: new Date().toLocaleTimeString(),
+        message: 'Evaluating initial prompt',
+        title: 'Evaluation',
+        step: 2
+      }]);
+
+      // Handle generation step
+      setLogs(prev => [...prev, {
+        timestamp: new Date().toLocaleTimeString(),
+        message: 'Generating prompt variations',
+        title: 'Generation',
+        step: 3
+      }]);
+
       // Add versions to store
       result.versions.forEach(version => {
         addPromptVersion(version);
@@ -65,7 +81,7 @@ export const usePromptOptimization = ({
         timestamp: new Date().toLocaleTimeString(),
         message: 'Optimization completed successfully',
         title: 'Complete',
-        step: 2
+        step: 4
       }]);
 
       onStreamingEnd?.();
@@ -94,4 +110,4 @@ export const usePromptOptimization = ({
     logs,
     setLogs,
   };
-};        
+};          
