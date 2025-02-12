@@ -116,9 +116,9 @@ const NodeDetails: React.FC<NodeDetailsProps> = ({ version, versionIndex, parent
 
         {evaluation?.strengthsAndWeaknesses && (
           <div>
-            <h3 className="text-sm font-medium mb-2">Strengths & Weaknesses</h3>
+            <h3 className="text-sm font-medium mb-2">Strengths &amp; Weaknesses</h3>
             <div className="bg-gray-100 dark:bg-gray-800 rounded p-3">
-              <p className="text-sm">{evaluation.strengthsAndWeaknesses}</p>
+              <p className="text-sm">{evaluation?.strengthsAndWeaknesses}</p>
             </div>
           </div>
         )}
@@ -187,4 +187,4 @@ const NodeDetails: React.FC<NodeDetailsProps> = ({ version, versionIndex, parent
   );
 };
 
-export default NodeDetails;        
+export default NodeDetails;            
