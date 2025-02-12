@@ -84,34 +84,44 @@ const NodeDetails: React.FC<NodeDetailsProps> = ({ version, versionIndex, parent
         <div>
           <h3 className="text-sm font-medium mb-2">Analysis</h3>
           <div className="space-y-2">
-            <div className="bg-gray-100 dark:bg-gray-800 rounded p-3">
-              <h4 className="text-xs font-medium mb-1">Concept Alignment</h4>
-              <p className="text-sm">{evaluation.analysis.conceptAlignment}</p>
-            </div>
-            <div className="bg-gray-100 dark:bg-gray-800 rounded p-3">
-              <h4 className="text-xs font-medium mb-1">Contextual Accuracy</h4>
-              <p className="text-sm">{evaluation.analysis.contextualAccuracy}</p>
-            </div>
-            <div className="bg-gray-100 dark:bg-gray-800 rounded p-3">
-              <h4 className="text-xs font-medium mb-1">Completeness</h4>
-              <p className="text-sm">{evaluation.analysis.completeness}</p>
-            </div>
+            {evaluation?.analysis?.conceptAlignment && (
+              <div className="bg-gray-100 dark:bg-gray-800 rounded p-3">
+                <h4 className="text-xs font-medium mb-1">Concept Alignment</h4>
+                <p className="text-sm">{evaluation.analysis.conceptAlignment}</p>
+              </div>
+            )}
+            {evaluation?.analysis?.contextualAccuracy && (
+              <div className="bg-gray-100 dark:bg-gray-800 rounded p-3">
+                <h4 className="text-xs font-medium mb-1">Contextual Accuracy</h4>
+                <p className="text-sm">{evaluation.analysis.contextualAccuracy}</p>
+              </div>
+            )}
+            {evaluation?.analysis?.completeness && (
+              <div className="bg-gray-100 dark:bg-gray-800 rounded p-3">
+                <h4 className="text-xs font-medium mb-1">Completeness</h4>
+                <p className="text-sm">{evaluation.analysis.completeness}</p>
+              </div>
+            )}
           </div>
         </div>
 
-        <div>
-          <h3 className="text-sm font-medium mb-2">Improvements</h3>
-          <div className="bg-gray-100 dark:bg-gray-800 rounded p-3">
-            <p className="text-sm">{evaluation.analysis.improvements}</p>
+        {evaluation?.analysis?.improvements && (
+          <div>
+            <h3 className="text-sm font-medium mb-2">Improvements</h3>
+            <div className="bg-gray-100 dark:bg-gray-800 rounded p-3">
+              <p className="text-sm">{evaluation.analysis.improvements}</p>
+            </div>
           </div>
-        </div>
+        )}
 
-        <div>
-          <h3 className="text-sm font-medium mb-2">Strengths & Weaknesses</h3>
-          <div className="bg-gray-100 dark:bg-gray-800 rounded p-3">
-            <p className="text-sm">{evaluation.strengthsAndWeaknesses}</p>
+        {evaluation?.strengthsAndWeaknesses && (
+          <div>
+            <h3 className="text-sm font-medium mb-2">Strengths & Weaknesses</h3>
+            <div className="bg-gray-100 dark:bg-gray-800 rounded p-3">
+              <p className="text-sm">{evaluation.strengthsAndWeaknesses}</p>
+            </div>
           </div>
-        </div>
+        )}
 
         {evaluation.parentComparison && (
           <div>
@@ -177,4 +187,4 @@ const NodeDetails: React.FC<NodeDetailsProps> = ({ version, versionIndex, parent
   );
 };
 
-export default NodeDetails;  
+export default NodeDetails;        
